@@ -3,6 +3,7 @@ package ru.vensy.comfortsofttest.exception;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,9 +14,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class,
             MethodArgumentTypeMismatchException.class,
-            ConstraintViolationException.class})
+            ConstraintViolationException.class,
+            MissingServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleBadRequestException(RuntimeException ex) {
+    public String handleBadRequestException(Exception ex) {
         return handleException(ex);
     }
 
@@ -31,7 +33,7 @@ public class GlobalExceptionHandler {
         return handleException(ex);
     }
 
-    private String handleException(RuntimeException ex) {
+    private String handleException(Exception ex) {
         String message = ex.getMessage();
         log.error(message);
 
